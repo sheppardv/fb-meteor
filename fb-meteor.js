@@ -51,7 +51,7 @@ if (Meteor.isClient) {
             currentMatch = Matches.findOne({
                 ended_at: null
             });
-            if(currentMatch){
+            if(currentMatch && currentMatch.started_at){
                 counter = setInterval(function () {
                     var diffInSec = ( (new Date()).getTime() - currentMatch.started_at.getTime() ) / (1000);
                     $('#counter').html( diffInSec.toFixed()  + ' s');
