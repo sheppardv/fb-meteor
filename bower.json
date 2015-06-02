@@ -1,0 +1,16 @@
+{
+  "name": "fb-meteor",
+  "main": "fb-meteor.js",
+  "version": "0.0.0",
+  "authors": [
+    "sheppard <vivchar.danylo@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

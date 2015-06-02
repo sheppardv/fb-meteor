@@ -1,0 +1,78 @@
+<head>
+    <title>Football lock</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+</head>
+
+<body>
+<div class="container">
+    <h1>Check football room!</h1>
+
+    {{> current_match}}
+    {{> match_history}}
+</div>
+</body>
+
+<template name="current_match">
+    <div class="col-md-8 row">
+        <fieldset disabled="{{#if match.started_at}}disabled{{/if}}">
+            <div class="col-md-4">
+                <label>First command</label>
+                {{#each match.first_team}}
+                <div class="form-group">
+                    <input type="email" class="form-control first_team"
+                           value="{{this}}"
+                           placeholder="First player">
+                </div>
+                {{/each}}
+            </div>
+            <div class="col-md-4">
+                <label>Second command</label>
+                {{#each match.second_team}}
+                <div class="form-group">
+                    <input type="email" class="form-control second_team"
+                           value="{{this}}"
+                           placeholder="First player">
+                </div>
+                {{/each}}
+            </div>
+        </fieldset>
+
+    </div>
+    <div class="row">
+        {{#if match.started_at}}
+        <span id="started_at">{{formatDate match.started_at false}}</span>
+        <span id="counter">0</span>
+        <button type="button" id="stop" class="btn btn-danger">Stop match</button>
+        {{else}}
+        <button type="button" id="start" class="btn btn-success">Starch match</button>
+        {{/if}}
+    </div>
+</template>
+
+
+<template name="match_history">
+    <table class="table">
+        <caption>Scores will be soon.</caption>
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Started at</th>
+            <th>Ended at</th>
+            <th>Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each matches}}
+        <tr>
+            <td>{{first_team}}</td>
+            <td>{{second_team}}</td>
+            <td>{{formatDate started_at}}</td>
+            <td>{{formatDate ended_at}}</td>
+            <td>{{ timeDiffInMin started_at ended_at }} min</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</template>
