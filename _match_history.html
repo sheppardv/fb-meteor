@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<template name="match_history">
+    <table class="table">
+        <caption>Scores will be soon.</caption>
+        <thead>
+        <tr>
+            <th>First Team</th>
+            <th>Second Team</th>
+            <th>Started at</th>
+            <th>Ended at</th>
+            <th>Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each matches}}
+            <tr>
+                <td>{{joinTeamNames first_team}}</td>
+                <td>{{joinTeamNames second_team}}</td>
+                <td>{{formatDate started_at}}</td>
+                <td title="{{formatDate ended_at false}}">{{fromNow ended_at}}</td>
+                <td>{{timeDiffInMin started_at ended_at }} min</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</template>
