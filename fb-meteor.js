@@ -32,9 +32,9 @@ UI.registerHelper('fromNow', function (date) {
     return date ? moment(date).fromNow() : 'N/A';
 });
 
-UI.registerHelper('indexedArray', function(context, options) {
+UI.registerHelper('indexedArray', function (context, options) {
     if (context) {
-        return context.map(function(item, index) {
+        return context.map(function (item, index) {
             item._index = index + 1;
             return item;
         });
@@ -48,15 +48,13 @@ UI.registerHelper('joinTeamNames', function (array) {
 });
 
 if (Meteor.isClient) {
-    var $counter = $('#counter');
-
     var counter = null;
 
     Template.match_history.helpers({
         matches: function () {
             return Matches.find({
                 ended_at: {$ne: null}
-            }, {sort: {ended_at:-1}});
+            }, {sort: {ended_at: -1}});
         }
     });
 
@@ -65,23 +63,39 @@ if (Meteor.isClient) {
             currentMatch = Matches.findOne({
                 ended_at: null
             });
-            if(currentMatch && currentMatch.started_at){
+            if (currentMatch && currentMatch.started_at && !counter) {
                 counter = setInterval(function () {
-                    var diffInSec = ( (new Date()).getTime() - currentMatch.started_at.getTime() ) / (1000);
-                    $('#counter').html( diffInSec.toFixed()  + ' s');
+                    $('#counter').html(moment().diff(currentMatch.started_at, 'minute') + ' min');
                 }, 500);
                 console.log(counter);
             }
-
             return currentMatch || new Match();
         }
     });
 
     Template.match_history.events({});
 
-    onTypeStream.on('teamPlayerChange', function(obj) {
-        $('input[data-team=' + obj.team +'][data-player=' + obj.player +']').val(obj.value);
+    onTypeStream.on('teamPlayerChange', function (obj) {
+        var qj_el = $('input[data-team=' + obj.team + '][data-player=' + obj.player + ']');
+        qj_el.val(obj.value);
+
+        enableStartBtn();
+
     });
+
+    function enableStartBtn() {
+        var isEvery = Array.prototype.every.call(
+            $('.onType'),
+            function (elem) {
+                return !!elem.value;
+            }
+        );
+        var jq_el_start = $('#start');
+        if (jq_el_start.prop('disabled')) {
+            jq_el_start.prop('disabled', !isEvery);
+        }
+
+    }
 
     Template.current_match.events({
         'input .onType': function (event) {
@@ -91,6 +105,9 @@ if (Meteor.isClient) {
                 team: el.getAttribute('data-team'),
                 player: el.getAttribute('data-player')
             };
+
+            enableStartBtn();
+
             onTypeStream.emit('teamPlayerChange', objToSend);
         },
 
@@ -106,8 +123,9 @@ if (Meteor.isClient) {
             currentMatch = addNewMatch(first_team_names, second_team_names);
 
             counter = setInterval(function () {
-                $counter.html( ( (new Date()).getDate() - currentMatch ) / (60*1000) );
-            }, 500)
+                $('#counter').html(moment().diff(currentMatch.started_at, 'minute') + ' min');
+            }, 500);
+            console.log('counter ' + counter);
 
         },
         'click #stop': function () {
@@ -116,6 +134,8 @@ if (Meteor.isClient) {
             });
 
             Matches.update(currentMatch._id, {$set: {ended_at: new Date()}});
+            clearInterval(counter);
+            counter = null;
         }
 
     });

@@ -6,7 +6,7 @@
                     <div class="panel panel-default">
                         {{#each indexedArray match.first_team}}
                             <div class="form-group panel-body">
-                                <input type="email" class="form-control first_team onType"
+                                <input type="text" class="form-control first_team onType"
                                        data-team="1"
                                        data-player="{{_index}}"
                                        value="{{this.name}}"
@@ -23,7 +23,7 @@
                     <div class="panel panel-default">
                         {{#each indexedArray match.second_team}}
                             <div class="form-group panel-body">
-                                <input type="email" class="form-control second_team onType"
+                                <input type="text" class="form-control second_team onType"
                                        data-team="2"
                                        data-player="{{_index}}"
                                        value="{{this.name}}"
@@ -37,12 +37,12 @@
         </div>
         <div class="row">
             {{#if match.started_at}}
-                <span id="started_at">{{formatDate match.started_at false}}</span>
-                <span id="counter">0</span>
+                <div><label>Started at:  </label><span id="started_at">{{formatDate match.started_at false}}</span></div>
+                <div><label>Duration:  </label><span id="counter">0</span></div>
                 <button type="button" id="stop" class="btn btn-danger">Stop match</button>
             {{else}}
-                <button type="submit" id="start" class="btn btn-success">Starch match</button>
+                <button type="button" disabled="disabled" id="start" class="btn btn-success">Start match</button>
             {{/if}}
         </div>
     </form>
-</template>\
+</template>
